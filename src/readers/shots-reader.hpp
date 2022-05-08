@@ -1,3 +1,4 @@
+#pragma once
 #include "../memory-utils/memory-utils.hpp"
 #include "../reader.hpp"
 
