@@ -50,12 +50,3 @@ uintptr_t get_module_base_address(DWORD process_id, const wchar_t* module_name) 
   CloseHandle(processes_snapshot);
   return module_base_address;
 }
-
-uintptr_t follow_mallocd_chain(HANDLE process, uintptr_t base_address, std::vector<unsigned int> offsets) {
-  uintptr_t address = base_address;
-  for (unsigned int i = 0; i < offsets.size(); ++i) {
-    ReadProcessMemory(process, (BYTE*) address, &address, sizeof(address), 0);
-    address += offsets[i];
-  }
-  return address;
-}

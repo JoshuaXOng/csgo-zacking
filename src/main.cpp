@@ -1,10 +1,13 @@
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <vector>
 #include <cstdint>
 #include <Windows.h>
 #include <chrono>
 #include <thread>
 #include "./process-utils/process-utils.hpp"
+#include "./memory-utils/memory-utils.hpp"
 #include "../dependencies/hazedumper-master/csgo.hpp"
 
 int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line, int n_cmd_show) {
@@ -24,25 +27,20 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
 
   DWORD container;
   while (true) {
-    std::cout << "START" << std::endl;
-    int count = 0;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    for (int i = 0; i < 10000000; ++i) {
-      BOOL isReadSuccess = ReadProcessMemory(process, (BYTE*) module + i*4, &container, sizeof(DWORD), 0);
-      if (!isReadSuccess) {
-        std::cout << "Bad memory read occured." << std::endl;
-        continue;
-      }
+    uintptr_t health_address = follow_pointer_chain(process, module + 0xDB75DC, { 0x100 });
+    std::ostringstream printing_health_address;
+    printing_health_address << "0x" << std::setfill('0') << std::setw(8) << std::hex << health_address;
+    std::cout << "At" << " " << printing_health_address.str() << ": " << std::endl;
 
-      if (container == 1337) {
-        std::cout << container << std::endl;
-        count++;
-      }
+    BOOL isReadSuccess = ReadProcessMemory(process, (BYTE*) health_address, &container, sizeof(DWORD), 0);
+    if (!isReadSuccess) {
+      std::cout << "Bad memory read occured." << std::endl;
+      continue;
     }
-    
-    std::cout << "END" << std::endl;
-    std::cout << count << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+    std::cout << "The value is: " << container << std::endl;
   }
 
   return EXIT_SUCCESS;
