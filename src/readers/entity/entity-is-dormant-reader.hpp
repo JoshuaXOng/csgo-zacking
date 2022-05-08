@@ -2,7 +2,7 @@
 #include "../../memory-utils/memory-utils.hpp"
 #include "../../reader.hpp"
 
-class EntityIsDormantReader : Reader {
+class EntityIsDormantReader : public Reader {
   public:
     EntityIsDormantReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t engine_module, uintptr_t entity_address) 
     : Reader(csgo_process, client_module, engine_module) {

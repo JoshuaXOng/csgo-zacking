@@ -1,14 +1,9 @@
 #pragma once
+#include "../../types.hpp"
 #include "../../memory-utils/memory-utils.hpp"
 #include "../../reader.hpp"
 
-struct Vec3 {
-  float x;
-  float y;
-  float z;
-};
-
-class EntityVecOriginReader : Reader {
+class EntityVecOriginReader : public Reader {
   public:
     EntityVecOriginReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t engine_module, uintptr_t entity_address) 
     : Reader(csgo_process, client_module, engine_module) {

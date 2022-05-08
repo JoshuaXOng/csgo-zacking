@@ -2,7 +2,7 @@
 #include "../memory-utils/memory-utils.hpp"
 #include "../reader.hpp"
 
-class EntityListReader : Reader {
+class EntityListReader : public Reader {
   public:
     EntityListReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t engine_module) 
     : Reader(csgo_process, client_module, engine_module) {}

@@ -13,6 +13,8 @@
 #include "./readers/entity-list-reader.hpp"
 #include "./readers/entity/entity-health-reader.hpp"
 #include "./readers/entity/entity-vec-origin-reader.hpp"
+#include "./writers/view-angle-writer.hpp"
+#include "./aim-zack/aim-zack.hpp"
 
 struct Module {
   HANDLE process;
@@ -43,9 +45,11 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
   EntityHealthReader* idk_entity_health_reader = new EntityHealthReader(csgo, client_dll, engine_dll, idk_entity_address);
   EntityVecOriginReader* idk_entity_vec_origin_reader = new EntityVecOriginReader(csgo, client_dll, engine_dll, idk_entity_address);
   
+  ViewAngleWriter* view_angle_writer = new ViewAngleWriter(csgo, client_dll, engine_dll);
+
   DWORD value_container;
   while (true) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
     // std::cout << "At" << " " << get_number_as_hex(health_reader->get_value().address) << ": " << health_reader->get_value().value << std::endl;
 
@@ -61,9 +65,12 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
     // std::cout << a.y << std::endl;
     // std::cout << a.z << std::endl;
     
-    Vec3 b = { (rand() % 176) - 90, (rand() % 360) - 180, 0 };
-    bool result = WriteProcessMemory(csgo, (BYTE*) follow_pointer_chain(csgo, engine_dll + 0x58CFC4, { 0x4D90 }), &b, sizeof(Vec3), 0);
-    std::cout << result << std::endl;
+    // Vec3 b = { (rand() % 176) - 90, (rand() % 360) - 180, 0 };
+    // view_angle_writer->set_value(reinterpret_cast<DWORD*>(&b));
+    // bool result = WriteProcessMemory(csgo, (BYTE*) follow_pointer_chain(csgo, engine_dll + 0x58CFC4, { 0x4D90 }), &b, sizeof(Vec3), 0);
+    // std::cout << result << std::endl;
+    AimZack* aim_zack = new AimZack(csgo, client_dll, engine_dll);
+    aim_zack->look_at_entity(1);
   };
 
   return EXIT_SUCCESS;
