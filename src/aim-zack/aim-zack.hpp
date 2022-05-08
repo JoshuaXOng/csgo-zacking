@@ -28,14 +28,21 @@ class AimZack {
       EntityVecOriginReader* ith_entity_vo_reader = new EntityVecOriginReader(this->csgo_process, this->client_module, this->engine_module, ith_entity_address);
       Vec3 ith_vec_origin = ith_entity_vo_reader->get_value_as_3d_vector();
 
-      auto x_delta = abs(ith_vec_origin.x - self_vec_origin.x);
-      auto y_delta = abs(ith_vec_origin.y - self_vec_origin.y);
-      auto z_delta = abs(ith_vec_origin.z - self_vec_origin.z);
-      Vec3 desired_view_vector = { atan(z_delta / y_delta) * 180 / PI, 90 - (atan(x_delta / y_delta) * 180 / PI), 0 };
+      auto x_delta = ith_vec_origin.x - self_vec_origin.x;
+      auto y_delta = ith_vec_origin.y - self_vec_origin.y;
+      auto z_delta = ith_vec_origin.z - self_vec_origin.z;
 
-      // std::cout << x_delta << std::endl;
-      // std::cout << y_delta << std::endl;
-      // std::cout << z_delta << std::endl;
+
+
+      Vec3 desired_view_vector; 
+      if (x_delta >= 0 && y_delta >= 0) 
+        desired_view_vector = { -atan(z_delta / y_delta) * 180 / (float) PI, 90 - (atan(x_delta / y_delta) * 180 / (float) PI), 0 };
+      if (x_delta >= 0 && y_delta < 0) 
+        desired_view_vector = { -atan(z_delta / y_delta) * 180 / (float) PI, (atan(y_delta / x_delta) * 180 / (float) PI), 0 };
+      if (x_delta < 0 && y_delta >= 0) 
+        desired_view_vector = { -atan(z_delta / y_delta) * 180 / (float) PI, -180 + (atan(y_delta / x_delta) * 180 / (float) PI), 0 };
+      if (x_delta < 0 && y_delta < 0)
+        desired_view_vector = { -atan(z_delta / y_delta) * 180 / (float) PI, -90 - (atan(x_delta / y_delta) * 180 / (float) PI), 0 };
 
       ViewAngleReader* var = new ViewAngleReader(this->csgo_process, this->client_module, this->engine_module);
       // std::cout << var->get_value_as_3d_vector().x << std::endl;
