@@ -4,8 +4,8 @@
 
 class EntityHealthReader : Reader {
   public:
-    EntityHealthReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t entity_address) 
-    : Reader(csgo_process, client_module) {
+    EntityHealthReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t engine_module, uintptr_t entity_address) 
+    : Reader(csgo_process, client_module, engine_module) {
       this->entity_address = entity_address;
     }
 

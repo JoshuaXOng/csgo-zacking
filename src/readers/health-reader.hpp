@@ -4,8 +4,8 @@
 
 class HealthReader : Reader {
   public:
-    HealthReader(HANDLE csgo_process, uintptr_t client_module) 
-    : Reader(csgo_process, client_module) {}
+    HealthReader(HANDLE csgo_process, uintptr_t client_module, uintptr_t engine_module) 
+    : Reader(csgo_process, client_module, engine_module) {}
 
     ReaderResult get_value() {
       uintptr_t health_address = follow_pointer_chain(this->csgo_process, this->client_module + 0xDB75DC, { 0x100 });

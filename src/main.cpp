@@ -35,13 +35,13 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
     return EXIT_FAILURE;
   }
 
-  HealthReader* health_reader = new HealthReader(csgo, client_dll);
+  HealthReader* health_reader = new HealthReader(csgo, client_dll, engine_dll);
 
-  EntityListReader* entity_list_reader = new EntityListReader(csgo, client_dll);
+  EntityListReader* entity_list_reader = new EntityListReader(csgo, client_dll, engine_dll);
   auto [idk_entity_address, idk_entity_value] = entity_list_reader->get_ith_entity(0);
 
-  EntityHealthReader* idk_entity_health_reader = new EntityHealthReader(csgo, client_dll, idk_entity_address);
-  EntityVecOriginReader* idk_entity_vec_origin_reader = new EntityVecOriginReader(csgo, client_dll, idk_entity_address);
+  EntityHealthReader* idk_entity_health_reader = new EntityHealthReader(csgo, client_dll, engine_dll, idk_entity_address);
+  EntityVecOriginReader* idk_entity_vec_origin_reader = new EntityVecOriginReader(csgo, client_dll, engine_dll, idk_entity_address);
   
   DWORD value_container;
   while (true) {
@@ -61,7 +61,7 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
     // std::cout << a.y << std::endl;
     // std::cout << a.z << std::endl;
     
-    Vec3 b = { 1., 150., 0 };
+    Vec3 b = { (rand() % 176) - 90, (rand() % 360) - 180, 0 };
     bool result = WriteProcessMemory(csgo, (BYTE*) follow_pointer_chain(csgo, engine_dll + 0x58CFC4, { 0x4D90 }), &b, sizeof(Vec3), 0);
     std::cout << result << std::endl;
   };
