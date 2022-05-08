@@ -35,9 +35,7 @@ int wWinMain(HINSTANCE h_instance, HINSTANCE h_orev_instance, LPWSTR p_cmd_line,
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     HealthReader* health_reader = new HealthReader(process, module);
-    std::ostringstream printing_health_address;
-    printing_health_address << "0x" << std::setfill('0') << std::setw(8) << std::hex << health_reader->get_value().address;
-    std::cout << "At" << " " << printing_health_address.str() << ": " << health_reader->get_value().value << std::endl;
+    std::cout << "At" << " " << get_number_as_hex(health_reader->get_value().address) << ": " << health_reader->get_value().value << std::endl;
   }
 
   return EXIT_SUCCESS;

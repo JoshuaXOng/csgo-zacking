@@ -3,6 +3,7 @@
 #include <TlHelp32.h>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <iomanip>
 #include <vector>
 #include <cstdint>
@@ -16,4 +17,10 @@ uintptr_t follow_pointer_chain(HANDLE process, uintptr_t base_address, std::vect
     address += offsets[i];
   }
   return address;
+}
+
+std::string get_number_as_hex(uintptr_t number) {
+  std::ostringstream hex_number;
+  hex_number << "0x" << std::setfill('0') << std::setw(8) << std::hex << number;
+  return hex_number.str();
 }
