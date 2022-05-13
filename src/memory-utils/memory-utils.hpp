@@ -1,5 +1,7 @@
 #pragma once
 #include <windows.h>
+#include <memoryapi.h>
+#include <errhandlingapi.h>
 #include <TlHelp32.h>
 #include <iostream>
 #include <sstream>
@@ -23,4 +25,9 @@ std::string get_number_as_hex(uintptr_t number) {
   std::ostringstream hex_number;
   hex_number << "0x" << std::setfill('0') << std::setw(8) << std::hex << number;
   return hex_number.str();
+}
+
+void get_process_size(LPCVOID process_pointer, PMEMORY_BASIC_INFORMATION& process_info, DWORD& gps_error) {
+  if (!VirtualQuery(process_pointer, process_info, sizeof(PMEMORY_BASIC_INFORMATION))) 
+    GetLastError();
 }

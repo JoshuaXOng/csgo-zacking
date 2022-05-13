@@ -1,5 +1,11 @@
 #pragma once
 #include <Windows.h>
+#include <exception>
+
+class ReaderException : public std::runtime_error {
+  public:
+    ReaderException(const char* message): std::runtime_error(message) {}
+};
 
 struct ReaderResult {
   uintptr_t address;
